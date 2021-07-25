@@ -1,0 +1,44 @@
+- hosts: all
+  tasks:
+          - name: yum repo for docker
+            yum_repository:
+                    name: "docker"
+                    baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+                    description: "yum repo for docker"
+                    gpgcheck: no
+          - name: install docker-ce by command
+            shell: "yum install docker-ce --nobest -y"
+            
+          - name: Start docker service
+            service:
+                    name: docker
+                    state: started
+                    enabled: yes 
+
+          - name: Install Docker Module for Python
+            pip:
+                name: docker
+                                  
+          
+          - name: Pulling httpd image on top of Docker
+            docker_image:
+                    name: "httpd"
+                    source: pull
+
+          - name: Copy files from controller to manager node at /var/www/html
+            copy:
+                    dest: /var/www/html/index.html
+                    content: "hi I am from Docker"
+           
+          - name: create a container and put rahul.html and expose port 8080
+            docker_container:
+                    name: myos
+                    image: httpd
+                    state: started
+                    ports:
+                            - "2000:80"
+                    exposed_ports:
+                            - 80
+                    volumes:
+                        - /var/www/html/:/usr/local/apache2/htdocs/
+
