@@ -6,6 +6,8 @@
                     baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
                     description: "yum repo for docker"
                     gpgcheck: no
+                    
+                    
           - name: install docker-ce by command
             shell: "yum install docker-ce --nobest -y"
             
@@ -19,7 +21,6 @@
             pip:
                 name: docker
                                   
-          
           - name: Pulling httpd image on top of Docker
             docker_image:
                     name: "httpd"
